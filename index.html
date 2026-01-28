@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Styles Profile</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:'Courier New', monospace;
+  user-select:none;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle at top,#001a00,#000);
+  color:#00ff9c;
+  overflow:hidden;
+}
+
+/* animated grid */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(0deg,rgba(0,255,156,.08) 0 1px,transparent 1px 40px),
+    repeating-linear-gradient(90deg,rgba(0,255,156,.08) 0 1px,transparent 1px 40px);
+  animation:grid 10s linear infinite;
+}
+
+@keyframes grid{
+  to{background-position:0 400px,400px 0}
+}
+
+/* card */
+.card{
+  position:relative;
+  width:360px;
+  padding:25px;
+  border-radius:20px;
+  background:rgba(0,0,0,.75);
+  border:1px solid rgba(0,255,156,.4);
+  box-shadow:0 0 25px rgba(0,255,156,.35);
+  text-align:center;
+  z-index:2;
+}
+
+/* image protection */
+.profile-wrapper{
+  width:150px;
+  height:150px;
+  margin:0 auto 20px;
+  border-radius:50%;
+  padding:3px;
+  background:linear-gradient(45deg,#00ff9c,#007a4c);
+  animation:glow 2s infinite alternate;
+  position:relative;
+  overflow:hidden;
+}
+
+@keyframes glow{
+  from{box-shadow:0 0 10px #00ff9c}
+  to{box-shadow:0 0 30px #00ff9c}
+}
+
+.secure-img{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:url('https://i.ibb.co.com/jk5cbFtK/premium-vector-1727472798424-ac2a798a4873.png') center/cover no-repeat;
+  animation:spin 8s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes spin{
+  from{transform:rotateY(0deg)}
+  to{transform:rotateY(360deg)}
+}
+
+/* text */
+h2{margin:10px 0 6px;text-shadow:0 0 6px rgba(0,255,156,.7);}
+.tagline{font-size:13px;opacity:.8;margin-bottom:18px;}
+
+.info{
+  text-align:left;
+  font-size:14px;
+  background:rgba(0,255,156,.06);
+  padding:15px;
+  border-radius:12px;
+  border:1px dashed rgba(0,255,156,.4);
+}
+
+.info div{margin-bottom:12px;}
+.info span{cursor:pointer;}
+
+.cursor{
+  display:inline-block;
+  width:8px;
+  animation:blink 1s infinite;
+}
+@keyframes blink{50%{opacity:0}}
+
+/* small hacker button */
+.hacker-btn{
+  padding:6px 12px;
+  font-size:11px;
+  border-radius:6px;
+  border:1px solid #00ff9c;
+  background:transparent;
+  color:#00ff9c;
+  cursor:pointer;
+  letter-spacing:1px;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{50%{box-shadow:0 0 15px #00ff9c}}
+
+.footer{margin-top:15px;font-size:11px;opacity:.6}
+
+/* toast */
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#00ff9c;
+  color:#000;
+  padding:6px 14px;
+  border-radius:6px;
+  font-size:12px;
+  display:none;
+  z-index:9999;
+}
+
+/* screenshot warning */
+.warning{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  color:#00ff9c;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  z-index:999;
+}
+</style>
+</head>
+
+<body>
+
+<div class="warning" id="warn">⚠️ Screenshot Detected!</div>
+<div class="toast" id="toast">Copied!</div>
+
+<div class="card">
+  <div class="profile-wrapper">
+    <div class="secure-img"></div>
+  </div>
+
+  <h2>ACCESS GRANTED</h2>
+  <div class="tagline">My Personal Profile Contact Me</div>
+
+  <div class="info">
+    <div>Email: <span id="t1"></span><span class="cursor">|</span></div>
+    <div>Phone: <span id="t2"></span><span class="cursor">|</span></div>
+    <div>Location: <span id="t3"></span><span class="cursor">|</span></div>
+    <div>Visit our site: <span id="t4"></span></div>
+  </div>
+
+  <div class="footer">© SYSTEM ONLINE</div>
+</div>
+
+<script>
+/* block image actions only */
+document.addEventListener('contextmenu',e=>{
+  if(e.target.closest('.profile-wrapper')) e.preventDefault();
+});
+document.addEventListener('dragstart',e=>e.preventDefault());
+
+/* screenshot detect */
+document.addEventListener('keydown',e=>{
+  if(e.key==="PrintScreen"){
+    const w=document.getElementById("warn");
+    w.style.display="flex";
+    setTimeout(()=>w.style.display="none",1500);
+  }
+});
+
+/* copy function */
+function copyText(text){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(showToast);
+  }else{
+    const t=document.createElement("textarea");
+    t.value=text;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand("copy");
+    document.body.removeChild(t);
+    showToast();
+  }
+}
+
+function showToast(){
+  const t=document.getElementById("toast");
+  t.style.display="block";
+  setTimeout(()=>t.style.display="none",1000);
+}
+
+/* auto typing + proper copy */
+const data=[
+  {id:"t1",txt:"conntact.me@f5.si",copy:true},
+  {id:"t2",txt:"+880XXXXXXXXX",copy:true},
+  {id:"t3",txt:"Bangladesh"},
+  {id:"t4",btn:true,txt:"OPEN SITE",link:"index1.html"}
+];
+
+let a=0,b=0;
+
+function type(){
+  if(a>=data.length) return;
+  const el=document.getElementById(data[a].id);
+
+  if(data[a].btn){
+    el.innerHTML=`<button class="hacker-btn" onclick="location.href='${data[a].link}'">${data[a].txt}</button>`;
+    a++; setTimeout(type,400);
+    return;
+  }
+
+  if(b<data[a].txt.length){
+    el.textContent+=data[a].txt[b++];
+    setTimeout(type,70);
+  }else{
+    if(data[a].copy){
+      el.onclick=()=>{
+        copyText(el.textContent.trim());  // ✅ safe copy per element
+      };
+      el.title="Click to copy";
+    }
+    a++; b=0;
+    setTimeout(type,500);
+  }
+}
+
+window.onload=type;
+</script>
+
+</body>
+</html>
