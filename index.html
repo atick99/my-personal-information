@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker Style Profile</title>
+
+<style>
+*{box-sizing:border-box;font-family:'Courier New', monospace;}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle at top,#001a00,#000);
+  color:#00ff9c;
+  overflow:hidden;
+}
+
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(0deg,rgba(0,255,156,.08) 0,rgba(0,255,156,.08) 1px,transparent 1px,transparent 40px),
+    repeating-linear-gradient(90deg,rgba(0,255,156,.08) 0,rgba(0,255,156,.08) 1px,transparent 1px,transparent 40px);
+  animation:grid 10s linear infinite;
+  z-index:0;
+}
+
+@keyframes grid{
+  from{background-position:0 0,0 0}
+  to{background-position:0 400px,400px 0}
+}
+
+.card{
+  position:relative;
+  z-index:1;
+  width:360px;
+  padding:25px;
+  border-radius:20px;
+  background:rgba(0,0,0,.75);
+  border:1px solid rgba(0,255,156,.4);
+  box-shadow:0 0 25px rgba(0,255,156,.35);
+  text-align:center;
+}
+
+.profile-wrapper{
+  width:150px;
+  height:150px;
+  margin:0 auto 20px;
+  border-radius:50%;
+  padding:3px;
+  background:linear-gradient(45deg,#00ff9c,#007a4c);
+  animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+  from{box-shadow:0 0 10px #00ff9c}
+  to{box-shadow:0 0 30px #00ff9c}
+}
+
+.profile-wrapper img{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  animation:spin 8s linear infinite;
+}
+
+@keyframes spin{
+  from{transform:rotateY(0deg)}
+  to{transform:rotateY(360deg)}
+}
+
+h2{
+  margin:10px 0 6px;
+  font-size:22px;
+  text-shadow:0 0 6px rgba(0,255,156,.7);
+}
+
+.tagline{
+  font-size:13px;
+  opacity:.85;
+  margin-bottom:18px;
+}
+
+.info{
+  text-align:left;
+  font-size:14px;
+  background:rgba(0,255,156,.06);
+  padding:15px;
+  border-radius:12px;
+  border:1px dashed rgba(0,255,156,.4);
+}
+
+.info div{margin-bottom:12px;}
+
+.cursor{
+  display:inline-block;
+  width:8px;
+  animation:blink 1s infinite;
+}
+
+@keyframes blink{
+  0%,50%,100%{opacity:1}
+  25%,75%{opacity:0}
+}
+
+/* 🔘 Animated Button (small size) */
+.hacker-btn{
+  display:inline-block;
+  margin-top:6px;
+  padding:6px 12px;      /* 🔹 ছোট size */
+  border-radius:6px;     /* 🔹 ছোট radius */
+  border:1px solid #00ff9c;
+  background:transparent;
+  color:#00ff9c;
+  font-size:11px;        /* 🔹 ছোট text */
+  text-transform:uppercase;
+  letter-spacing:1px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 5px #00ff9c}
+  50%{box-shadow:0 0 15px #00ff9c}
+  100%{box-shadow:0 0 5px #00ff9c}
+}
+
+.hacker-btn::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(0,255,156,.4),transparent);
+  transform:translateX(-100%);
+}
+
+.hacker-btn:hover::before{
+  animation:scan 1s linear infinite;
+}
+
+@keyframes scan{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(100%)}
+}
+
+.footer{
+  margin-top:15px;
+  font-size:11px;
+  opacity:.6;
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+
+  <div class="profile-wrapper">
+    <img src="https://i.ibb.co.com/jk5cbFtK/premium-vector-1727472798424-ac2a798a4873.png">
+  </div>
+
+  <h2>ACCESS GRANTED</h2>
+  <div class="tagline">Personal Profile | Hacker UI</div>
+
+  <div class="info">
+    <div>Email: <span id="t1"></span><span class="cursor">|</span></div>
+    <div>Phone: <span id="t2"></span><span class="cursor">|</span></div>
+    <div>Location: <span id="t3"></span><span class="cursor">|</span></div>
+    <div>Visit our site: <span id="t4"></span></div>
+  </div>
+
+  <div class="footer">© 2026 SYSTEM ONLINE</div>
+</div>
+
+<script>
+const items = [
+  {el:'t1', text:'your@email.com'},
+  {el:'t2', text:'+880XXXXXXXXX'},
+  {el:'t3', text:'Bangladesh'},
+  {el:'t4', text:'OPEN SITE', button:true, link:'index1.html'}
+];
+
+let i=0,j=0;
+
+function type(){
+  if(i>=items.length) return;
+  const el=document.getElementById(items[i].el);
+  const txt=items[i].text;
+
+  if(j<txt.length){
+    el.textContent+=txt[j++];
+    setTimeout(type,70);
+  }else{
+    if(items[i].button){
+      el.innerHTML = `<button class="hacker-btn" onclick="location.href='${items[i].link}'">${items[i].text}</button>`;
+    }
+    i++; j=0;
+    setTimeout(type,500);
+  }
+}
+
+window.onload=type;
+</script>
+
+</body>
+</html>
